@@ -46,7 +46,7 @@ void MotorREV ( void ) {
     } 
 }
 
-void MotorCWTurn ( void ) {
+void MotorCCWTurn ( void ) {
     digitalWrite(n_MC_STDBY,1);     //Enable motor driver
 
     //Right Motor REV
@@ -70,7 +70,7 @@ void MotorCWTurn ( void ) {
     } 
 }
 
-void MotorCCWTurn ( void ) {
+void MotorCWTurn ( void ) {
     digitalWrite(n_MC_STDBY,1);     // Enable motor driver
 
     //Right Motor FWD
@@ -103,3 +103,4 @@ void MotorStop ( void ) {
 
 
 }
+

@@ -15,8 +15,13 @@ void StateEvaluation() {
     case REV_MOVEMENT:
       if(Timer20ms_Counts >= BACKUP_TIME) {
         Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
-        current_state = CW_90_TURN;
         last_state = REV_MOVEMENT;
+        if(last_turn_maneuver == CW_TURN) {
+          current_state = CCW_90_TURN;
+        }
+        else {
+          current_state = CW_90_TURN;
+        }  
       }
       else {
         wall_detected = false;
@@ -40,6 +45,7 @@ void StateEvaluation() {
       }
       
       else {
+        last_turn_maneuver = CW_TURN;
         wall_detected = false;
         MotorCWTurn();
       }     
@@ -77,6 +83,7 @@ void StateEvaluation() {
       
       else {
         wall_detected = false;
+        last_turn_maneuver = CCW_TURN;
         MotorCCWTurn();
       }
 

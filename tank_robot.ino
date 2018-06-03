@@ -44,7 +44,7 @@ upon the cell reaching a full charge.
 
 #define TURN_90_TIME      (2/.02)     //How many 20ms ticks are needed to make this turn
 #define TURN_180_TIME     (4/.02)     //How many 20ms ticks are needed to make this turn
-#define BACKUP_TIME       (3/.02)     //How many 20ms ticks are needed to make this turn
+#define BACKUP_TIME       (4/.02)     //How many 20ms ticks are needed to make this turn
 
 #define IND_SLOW_BLINK    0           //Associate the three different blink rates with actual numbers
 #define IND_MED_BLINK     1
@@ -61,6 +61,9 @@ upon the cell reaching a full charge.
 #define CCW_90_TURN     (CCW_180_TURN + 1)        // Robot making a counter-clockwise turn to the left by 90 deg
 #define HALT_MOVEMENT   (CCW_90_TURN + 1)         // Robot is not allowed to move
 
+//TURN MANEUVERS
+#define CCW_TURN        1
+#define CW_TURN         (CCW_TURN + 1)      
 
 /* CONTAINERS FOR DATA COMPONENTS */
 // Time keeping containers
@@ -75,18 +78,18 @@ bool          Timing20ms        = false;
 unsigned int  Timer20ms_Counts  = 0;
 
 // Other data containers
-unsigned char current_state   = 0;
-unsigned int  last_state      = 0;
-unsigned char new_state       = 0;
-float         anval           = 0;                // variable to read the value from the analog pin
-float         bat_voltage     = 0;                // Calculated battery voltage 
-int           ctr             = 0;
-long          distance        = 0;
-long          temp_distance   = 0;
-unsigned char blink_rate      = 0;   
-bool          wall_detected   = false;            // Flag is set when a wall is detected 
-bool          battery_dead    = false;            // Flag is set when the battery voltage falls below MIN_ALLOWED_BATV
-bool          charging        = false;            // This flag will indicate if the battery is charging
+unsigned char current_state       = 0;
+unsigned int  last_state          = 0;
+unsigned char last_turn_maneuver  = CCW_TURN;
+float         anval               = 0;                // variable to read the value from the analog pin
+float         bat_voltage         = 0;                // Calculated battery voltage 
+int           ctr                 = 0;
+long          distance            = 0;
+long          temp_distance       = 0;
+unsigned char blink_rate          = 0;   
+bool          wall_detected       = false;            // Flag is set when a wall is detected 
+bool          battery_dead        = false;            // Flag is set when the battery voltage falls below MIN_ALLOWED_BATV
+bool          charging            = false;            // This flag will indicate if the battery is charging
 
 void setup() {
   
@@ -127,7 +130,8 @@ void setup() {
 
   MotorStop ();
   analogWrite(MCPWM,PWM_VAL);
-  current_state = new_state = FWD_MOVEMENT;         // Initialize state
+  current_state = FWD_MOVEMENT;                     // Initialize state
+  last_turn_maneuver = CCW_TURN;                     // Keep track of the last turn maneuver 
   blink_rate = IND_SLOW_BLINK;                      // Initialize blink rate for LED
 
 }
@@ -248,3 +252,7 @@ ISR(TIMER2_COMPA_vect){    //timer2 interrupt
   }
 
 }
+
+
+
+
