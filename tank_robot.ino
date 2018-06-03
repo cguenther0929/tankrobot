@@ -19,9 +19,6 @@ The arduino pro min -- at least according to a few online resources -- is suppos
 and this seems to jive based on testing I've done in the lab.  
 Generally, this is a good resource for timers http://maxembedded.com/2011/06/avr-timers-timer2/   
 
-TODO: Latch "robot is charging" until power cycle! It needs to be this way because the charging status goes HI-Z
-upon the cell reaching a full charge. 
-  
 */
 
 
@@ -33,7 +30,7 @@ upon the cell reaching a full charge.
 #define TRIGGER_PIN       3  
 #define ECHO_PIN          2 
 #define n_BAT_CHG         4           // When this is low, the battery is charging 
-#define BATSEN            6
+#define BATSEN            A0
 
 #define MC_AIN1           17        // Pins related to motor control  
 #define MC_AIN2           16
@@ -81,6 +78,7 @@ unsigned int  Timer20ms_Counts  = 0;
 unsigned char current_state       = 0;
 unsigned int  last_state          = 0;
 unsigned char last_turn_maneuver  = CCW_TURN;
+bool          motors_enabled      = true;             // Great for debugging if we need to turn the motors off
 float         anval               = 0;                // variable to read the value from the analog pin
 float         bat_voltage         = 0;                // Calculated battery voltage 
 int           ctr                 = 0;
@@ -174,9 +172,9 @@ void loop() {
     if(blink_rate == IND_SLOW_BLINK) 
       digitalWrite(LEDPIN,!digitalRead(LEDPIN));
     
-    anval = analogRead(BATSEN);             //Read battery input voltage
-    bat_voltage = anval / 205.298;
-    Serial.print("Battery Votlage: "); Serial.println(bat_voltage);
+    // anval = analogRead(BATSEN);             //Read battery input voltage
+    // bat_voltage = anval / 205.298;
+    // Serial.print("Battery Votlage: "); Serial.println(bat_voltage);
     // if (bat_voltage <= MIN_ALLOWED_BATV && battery_dead != true) {
     //   Serial.println("we dead.");
     //   blink_rate = IND_FAST_BLINK;        
@@ -252,7 +250,3 @@ ISR(TIMER2_COMPA_vect){    //timer2 interrupt
   }
 
 }
-
-
-
-

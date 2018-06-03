@@ -1,5 +1,8 @@
 void MotorFWD ( void ) {
-    digitalWrite(n_MC_STDBY,1);     //Enable motor driver
+    if (motors_enabled)
+        digitalWrite(n_MC_STDBY,1);     // Enable motor driver
+    else
+        digitalWrite(n_MC_STDBY,0);     // Disable motor driver 
 
     //Right Motor FWD
     if(RT_POLARITY) {           
@@ -23,7 +26,10 @@ void MotorFWD ( void ) {
 }
 
 void MotorREV ( void ) {
-    digitalWrite(n_MC_STDBY,1);     //Enable motor driver
+    if (motors_enabled)
+        digitalWrite(n_MC_STDBY,1);     // Enable motor driver
+    else
+        digitalWrite(n_MC_STDBY,0);     // Disable motor driver 
 
     //Right Motor REV
     if(RT_POLARITY) {           
@@ -47,7 +53,10 @@ void MotorREV ( void ) {
 }
 
 void MotorCCWTurn ( void ) {
-    digitalWrite(n_MC_STDBY,1);     //Enable motor driver
+    if (motors_enabled)
+        digitalWrite(n_MC_STDBY,1);     // Enable motor driver
+    else
+        digitalWrite(n_MC_STDBY,0);     // Disable motor driver 
 
     //Right Motor REV
     if(RT_POLARITY) {           
@@ -71,7 +80,10 @@ void MotorCCWTurn ( void ) {
 }
 
 void MotorCWTurn ( void ) {
-    digitalWrite(n_MC_STDBY,1);     // Enable motor driver
+    if (motors_enabled)
+        digitalWrite(n_MC_STDBY,1);     // Enable motor driver
+    else
+        digitalWrite(n_MC_STDBY,0);     // Disable motor driver 
 
     //Right Motor FWD
     if(RT_POLARITY) {           
