@@ -39,7 +39,8 @@ Generally, this is a good resource for timers http://maxembedded.com/2011/06/avr
 #define n_MC_STDBY        10
 #define MCPWM             9 
 
-#define TURN_90_TIME      (2/.02)     //How many 20ms ticks are needed to make this turn
+#define FWD_MOVEMENT_TIME (12/.02)     // For forward movement when distance sensor is ignored
+#define TURN_90_TIME      (1.8/.02)     //How many 20ms ticks are needed to make this turn
 #define TURN_180_TIME     (4/.02)     //How many 20ms ticks are needed to make this turn
 #define BACKUP_TIME       (4/.02)     //How many 20ms ticks are needed to make this turn
 
@@ -51,12 +52,14 @@ Generally, this is a good resource for timers http://maxembedded.com/2011/06/avr
 #define LT_POLARITY       0         
 
 // FSM states
-#define FWD_MOVEMENT    1                         // Normal robot movement as it searches for a wall
-#define REV_MOVEMENT    (FWD_MOVEMENT + 1)        // Robot backing up
-#define CW_90_TURN      (REV_MOVEMENT + 1)        // Robot making a clockwise turn to the right by 90 deg
-#define CCW_180_TURN    (CW_90_TURN + 1)          // Robot making a counter-clockwise turn to the left by 180 deg
-#define CCW_90_TURN     (CCW_180_TURN + 1)        // Robot making a counter-clockwise turn to the left by 90 deg
-#define HALT_MOVEMENT   (CCW_90_TURN + 1)         // Robot is not allowed to move
+#define FWD_MOVEMENT            1         // Normal robot movement as it searches for a wall
+#define FWD_MOVEMENT_FOR_TIME   2         // Robot moves forward for so many seconds
+#define REV_MOVEMENT            3         // Robot backing up
+#define REV_MOVEMENT_FOR_TIME   4
+#define CW_90_TURN              5         // Robot making a clockwise turn to the right by 90 deg
+#define CCW_180_TURN            6         // Robot making a counter-clockwise turn to the left by 180 deg
+#define CCW_90_TURN             7         // Robot making a counter-clockwise turn to the left by 90 deg
+#define HALT_MOVEMENT           8         // Robot is not allowed to move
 
 //TURN MANEUVERS
 #define CCW_TURN        1
@@ -128,7 +131,10 @@ void setup() {
 
   MotorStop ();
   analogWrite(MCPWM,PWM_VAL);
-  current_state = FWD_MOVEMENT;                     // Initialize state
+  // current_state = FWD_MOVEMENT;                     // Initialize state
+  current_state = FWD_MOVEMENT_FOR_TIME;             // Initialize state
+  Timing20ms = true;                                  // If we are ignoring the sensor, this shall be true / false otherwise
+  Timer20ms_Counts = 0;                             
   last_turn_maneuver = CCW_TURN;                     // Keep track of the last turn maneuver 
   blink_rate = IND_SLOW_BLINK;                      // Initialize blink rate for LED
 

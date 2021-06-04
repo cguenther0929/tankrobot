@@ -12,6 +12,17 @@ void StateEvaluation() {
       }
     break;
 
+    case FWD_MOVEMENT_FOR_TIME:
+      if(Timer20ms_Counts >= FWD_MOVEMENT_TIME) {
+        Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
+        last_state = FWD_MOVEMENT_FOR_TIME;
+        current_state = CW_90_TURN;
+      }
+      else {
+        MotorFWD();
+      }
+    break;
+
     case REV_MOVEMENT:
       if(Timer20ms_Counts >= BACKUP_TIME) {
         Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
@@ -31,20 +42,38 @@ void StateEvaluation() {
     break;
 
     case CW_90_TURN:
+      // if(Timer20ms_Counts >= TURN_90_TIME) {
+      //   Timer20ms_Counts = 0; Timing20ms = false;      // Going to turn now, so need timer running
+      //   temp_distance = Get_Distance();
+      //   if(temp_distance <= MIN_DISTANCE) {
+      //     current_state = CCW_180_TURN;
+      //     last_state = CW_90_TURN;
+      //     Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
+      //   }
+      //   else {                                            //Okay to continue going forward
+      //     current_state = FWD_MOVEMENT;
+      //     last_state = CW_90_TURN;
+      //   }
+      // }
+      // else {
+      //   last_turn_maneuver = CW_TURN;
+      //   wall_detected = false;
+      //   MotorCWTurn();
+      // }   
+
       if(Timer20ms_Counts >= TURN_90_TIME) {
-        Timer20ms_Counts = 0; Timing20ms = false;      // Going to turn now, so need timer running
-        temp_distance = Get_Distance();
-        if(temp_distance <= MIN_DISTANCE) {
-          current_state = CCW_180_TURN;
-          last_state = CW_90_TURN;
-          Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
-        }
-        else {                                            //Okay to continue going forward
-          current_state = FWD_MOVEMENT;
-          last_state = CW_90_TURN;
-        }
+        Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
+        // temp_distance = Get_Distance();
+        // if(temp_distance <= MIN_DISTANCE) {
+        //   current_state = CCW_180_TURN;
+        //   last_state = CW_90_TURN;
+        //   Timer20ms_Counts = 0; Timing20ms = true;      // Going to turn now, so need timer running
+        // }
+        // else {                                            //Okay to continue going forward
+        current_state = FWD_MOVEMENT_FOR_TIME;
+        last_state = CW_90_TURN;
+        // }
       }
-      
       else {
         last_turn_maneuver = CW_TURN;
         wall_detected = false;
